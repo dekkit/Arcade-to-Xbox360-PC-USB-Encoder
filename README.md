@@ -41,7 +41,7 @@ Before you install the .ino file provided in this github,  you must add an 'Xinp
 
 ## Installing project on Pro Micro
 - Connect your arduino to pc
-- Open the .ino file within this respository in Arduino IDE
+- Open the .ino file within this respository in Arduino IDE (**download** [Arcade to Xbox360 PC USB Encoder](https://github.com/dekkit/Arcade-to-Xbox360-PC-USB-Encoder/tree/master/Arcade%20to%20Xbox360%20PC%20USB%20Encoder))
 - Under Tools > Board:  select the Pro Micro with Xinput  (if using the Sparkfun - check to make sure 5v, 16MHZ is selected) AND  make sure the correct port number is selected.
   	<img width="830" height="363" alt="image" src="https://github.com/user-attachments/assets/124244ee-bf2b-4f1a-88f4-b721e490fca6" />
 	
