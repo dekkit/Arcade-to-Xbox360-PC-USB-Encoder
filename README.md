@@ -48,6 +48,12 @@ Before you install the .ino file provided in this github,  you must add an 'Xinp
 - Under Sketch > select 'Upload'
 
 Once the pro micro has been programmed, it will no longer be recognised by the Ardunio IDE.   You can now test the device, by  using Windows + R (run window) and typing "joy.cpl"
+## Testing encoder
+Connecting each input pin to ground will activate the button or direction - this will help ensure that you have wired your buttons / joystick correctly.
+
+<img width="400" height="455" alt="image" src="https://github.com/user-attachments/assets/7d061b66-fd37-4e82-9c5d-d5e1e665a61b" />
+
+
 
 ## Oops! - how do i reprogram the Pro Micro?
 if the steps don't work or you need to re-program on the arduinio, you'll need to perform a hardware reset.
