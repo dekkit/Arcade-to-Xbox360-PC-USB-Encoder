@@ -1,63 +1,60 @@
-# Arduino XInput Library 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/XInput.svg?)](https://www.ardu-badge.com/XInput) [![Build Status](https://github.com/dmadison/ArduinoXInput/workflows/build/badge.svg?branch=master)](https://github.com/dmadison/ArduinoXInput/actions?query=workflow%3Abuild)
+# Arcade-to-Xbox360-PC-USB-Encoder
+This is a modification of the examples provided within the fantastic ArduinoXinput project (see https://github.com/dmadison/ArduinoXInput).
 
-This library lets you easily emulate an Xbox 360 controller using a USB-capable Arduino microcontroller.
+This project will enable you to wire your arcade / fighting stick to an arduino micro pro - it will appear within your windows pc as an 'Xbox 360 for Windows' usb device.   This is useful for many games that expect a windows gamepad without the need for additional software to emulate xbox gamepads.
 
-## Getting Started
 
-```cpp
-void setup() {
-	XInput.begin();
-}
+Key modifications
+- I've adapted the code to be better aligned with the Pro Micro and for use with building your own DIY Arcade Joysticks and control panels.
+- I've changed directional pad (up,down,left,right) to output as the left analog stick (using pre-defined values).   I found a few  arcade ports in steam that were relying on the player using the left analog stick. I've left the dpad code in, in case anyone needs revert it.
+- Moved the pin assignments around to better fit the pro micro layout (see pinout / wiring diagram below).
+- Removed some of the 'inverse' logic as it is no longer using analog sticks as inputs.
+- Included additional notes in case you'd like to make your own code changes.
 
-void loop() {
-	XInput.press(BUTTON_A);
-	delay(1000);
+## Wiring Diagram
+Note this is specific to an Arduino Pro Micro, if using other arduino models make sure you check pin numbering as they do vary between models.
+
+<img width="709" height="654" alt="image" src="https://github.com/user-attachments/assets/d3e4c7ec-b9d7-451e-aa7e-f613693880ce" />
+
+## Background
+See the original project here: https://github.com/dmadison/ArduinoXInput for more details about Xinput.
+This library lets you easily emulate an Xbox 360 controller using a USB-capable Arduino microcontroller.  There are many examples if you'd like to experiment with the code and make your own custom gamepads/ arcade projects.
+
+## Hardware - Pro Micro
+- I used a cheap clone Pro Micro  5v, running at 16Mhz
+
+## Installing Boards / Libraries
+Before you install the .ino file provided in this github,  you must add an 'Xinput' edition of the Pro Mico board to the Arduino IDE.   While the original github explains the reasons for this. if you don't do this, it simply will not appear as an xbox for windows device.
+
+- **Install a compatible boards package** for Pro Micro (more info: https://github.com/dmadison/ArduinoXInput#compatible-boards) - please note that the Pro Micro appears under both 'Arduino AVR Core Boards' AND 'SparkFun AVR Boards' and both worked for my cheap clone Pro Micro board... it should look something like this:
+	<img width="662" height="362" alt="image" src="https://github.com/user-attachments/assets/0be76047-36df-4ff7-88c7-2d871df429aa" />
+	- type in 'Xinput' and select the latest versions to install.
+	<img width="786" height="443" alt="image" src="https://github.com/user-attachments/assets/d460783d-729e-44d4-a08d-361989626ea8" />
+- if you cannot see Xinput listed, refer back to the instructions linked above to ensure the boards will appear in your list or in case i've missed a step.
+- **Install the Xinput library**  (further info about installing libraries can be found here - https://docs.arduino.cc/software/ide-v1/tutorials/installing-libraries/ ) ... it should look something like this
+  
+	<img width="430" height="321" alt="image" src="https://github.com/user-attachments/assets/0649e375-f13c-4e81-9728-5d4597be3df8" />
+
+	<img width="786" height="443" alt="image" src="https://github.com/user-attachments/assets/6bba038f-0f84-484d-9a20-b591313c0ec0" />
+
+- Install the library and you should now be good to use the .ino file provided in this repository.
+
+## Installing project on Pro Micro
+- Connect your arduino to pc
+- Open the .ino file within this respository in Arduino IDE
+- Under Tools > Board:  select the Pro Micro with Xinput  (if using the Sparkfun - check to make sure 5v, 16MHZ is selected) AND  make sure the correct port number is selected.
+  	<img width="830" height="363" alt="image" src="https://github.com/user-attachments/assets/124244ee-bf2b-4f1a-88f4-b721e490fca6" />
 	
-	XInput.release(BUTTON_A);
-	delay(1000);
-}
-```
+- Under Sketch > select 'Upload'
 
-Before the library will work, you must install a compatible boards file that contains the XInput USB descriptors, otherwise the microcontroller won't behave like an XInput device. **This is not optional**. See the [compatible boards](#compatible-boards) section below for more information.
+Once the pro micro has been programmed, it will no longer be recognised by the Ardunio IDE.   You can now test the device, by  using Windows + R (run window) and typing "joy.cpl"
 
-After installing a compatible boards package, you must then [download and install the library](https://www.arduino.cc/en/guide/libraries). Once the XInput library is installed, open up the Arduino IDE and load an example sketch, located in `File -> Examples -> XInput` (I suggest trying the 'Blink' sketch first). Double-check that you have the correct XInput board and/or XInput USB type selected in the 'Tools' menu, then upload the sketch to your microcontroller.
+## Oops! - how do i reprogram the Pro Micro?
+if the steps don't work or you need to re-program on the arduinio, you'll need to perform a hardware reset.
+- this is achieved by joining the **RST pin** and the **GND pin**
+- once done, it will temporarily be seen by the Arduino IDE (you have about 8 seconds to  upload a new sketch).
+- If you keep running  of time, you can create a new blank sketch and upload that to the arduino
+- To do this successfully, in the board settings, i select the Arduino Micro as follows (note i select a board edition without Xinput), then upload a blank new sketch.
+- This will stop the board disconnecting after 8 seconds and enable you to upload any sketch.
 
-On Windows, you can test that the sketch is working properly by opening up the joystick control panel ([joy.cpl](https://support.microsoft.com/en-us/help/831361/how-to-troubleshoot-game-controllers-in-microsoft-games)) or by using [HTML5 Gamepad Tester](https://html5gamepad.com/). If you uploaded the XInput 'Blink' example, the #1 button ('A') should be slowly turning on and off.
-
-## Control Surfaces
-
-The library gives you access to the following controls available on the Xbox 360 controller:
-* 10 + 1 Digital Buttons
-* 2 Analog Joysticks (16 bit)
-* 2 Analog Triggers (8 bit)
-* 1 Four-Way Directional Pad (D-Pad)
-
-For the full list of control names as used in the library, [see the source files](src/XInput.h).
-
-The library also processes received data, so you can read the status of the controller's 2 rumble motors (8-bit), the assigned player number (1-4), and the index of the current LED animation. Data is sent and received automatically over USB.
-
-## Compatible Boards
-
-To function as an XInput device, you *must* use a compatible boards package with XInput USB descriptors. **This is not optional**. Without these descriptors the library will only function in "debug" mode and the microcontroller will not behave as an XInput device.
-
-The following boards packages are available:
-
-* #### [Arduino AVR Core Boards](https://www.github.com/dmadison/ArduinoXInput_AVR)
-  Modifies the Arduino AVR core to emulate an XInput device. Includes support for the Arduino Leonardo, Micro, Yun, and more. 
-
-* #### [SparkFun AVR Boards](https://www.github.com/dmadison/ArduinoXInput_SparkFun)
-  Provides support for the MaKey MaKey, Pro Micro, Fio, Qduino Mini, and LilyPad USB Plus. Requires the XInput AVR Core boards.
-
-* #### [Teensy Boards](https://www.github.com/dmadison/ArduinoXInput_Teensy)
-  Includes an 'XInput' USB mode for the Teensy 3.1, 3.2, 3.5, 3.6, LC, 4.0, 4.1, and MicroMod. Requires a preexisting Teensyduino installation.
-
-For a complete list of available packages and compatible boards see [the 'supported boards' file](extras/SupportedBoards.md). For information on how to add support for another Arduino-compatible board with native USB support, see [the documentation on the USB API](extras/XInputUSB_API.md).
-
-### Console Support
-
-Please be aware that none of the currently available board packages support connecting to the console itself. Genuine controllers use a dedicated hardware security chip that handshakes with the console. Arduinos do not have this chip, and its security method has not been (openly) broken.
-
-## License
-
-This library is licensed under the terms of the [MIT license](https://opensource.org/licenses/MIT). See the [LICENSE](LICENSE) file for more information.
+  <img width="758" height="423" alt="image" src="https://github.com/user-attachments/assets/d1121514-f679-4549-9ba7-e909722fdb2b" />
